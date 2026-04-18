@@ -3,25 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Repo Brain — Permissionless Login</title>
-  <link rel="stylesheet" href="/styles.css" />
+  <title>Redirecting to /login/</title>
+  <link rel="canonical" href="/login/" />
+  <meta http-equiv="refresh" content="0; url=/login/" />
+  <script>
+    window.location.replace('/login/');
+  </script>
 </head>
 <body>
-  <main class="container">
-    <section class="header">
-      <strong>🔐 Permissionless Role Access</strong>
-      <nav class="nav"><a href="/">Home</a></nav>
-    </section>
-
-    <h1>Choose role</h1>
-    <p>Current role: <strong id="current-role">guest</strong></p>
-    <div class="role-buttons">
-      <button class="button" data-role="admin">Continue as Admin</button>
-      <button class="button" data-role="user">Continue as User</button>
-      <button class="button" data-role="dev">Continue as Dev</button>
-    </div>
-    <p class="notice">No password gate in scaffold mode. Production auth can be attached later.</p>
-  </main>
-  <script src="/app.js"></script>
+  <p>Redirecting to <a href="/login/">/login/</a>...</p>
 </body>
 </html>

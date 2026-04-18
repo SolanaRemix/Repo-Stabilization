@@ -9,9 +9,9 @@
 ## Routes
 
 - `/`
-- `/login`
-- `/admin`
-- `/user`
-- `/dev`
+- `/login/`
+- `/admin/`
+- `/user/`
+- `/dev/`
 
 Configured in `vercel.json` for clean URLs.
