@@ -1,5 +1,10 @@
 (function () {
-  const role = localStorage.getItem('repoBrainRole') || 'guest';
+  let role = 'guest';
+  try {
+    role = localStorage.getItem('repoBrainRole') || 'guest';
+  } catch (e) {
+    role = 'guest';
+  }
   const roleSlot = document.getElementById('current-role');
   if (roleSlot) roleSlot.textContent = role;
 
