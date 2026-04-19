@@ -1,10 +1,13 @@
 (function () {
-  let role = 'guest';
-  try {
-    role = localStorage.getItem('repoBrainRole') || 'guest';
-  } catch (e) {
-    role = 'guest';
-  }
+  const getStoredRole = () => {
+    try {
+      return window.localStorage.getItem('repoBrainRole') || 'guest';
+    } catch (e) {
+      return 'guest';
+    }
+  };
+
+  const role = getStoredRole();
   const roleSlot = document.getElementById('current-role');
   if (roleSlot) roleSlot.textContent = role;
 
@@ -13,7 +16,7 @@
     btn.addEventListener('click', () => {
       const next = btn.getAttribute('data-role');
       try {
-        localStorage.setItem('repoBrainRole', next);
+        window.localStorage.setItem('repoBrainRole', next);
       } catch (e) {
         // Ignore storage failures so role selection still navigates.
       }
