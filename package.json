@@ -1,0 +1,26 @@
+{
+  "name": "repo-stabilization",
+  "version": "1.0.0",
+  "description": "Deterministic, drift-free **Repo Brain** scaffold for permissionless repository repair, verification, and governance.",
+  "main": "backend/server.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "node backend/server.js",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SolanaRemix/Repo-Stabilization.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/SolanaRemix/Repo-Stabilization/issues"
+  },
+  "homepage": "https://github.com/SolanaRemix/Repo-Stabilization#readme"
+}

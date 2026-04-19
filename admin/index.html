@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="header">
+      <strong>🛡️ Admin Dashboard</strong>
+      <nav class="nav"><a href="/">Home</a><a href="/login/">Switch Role</a></nav>
+    </section>
+    <section class="grid">
+      <article class="card"><h3>Repo Health</h3><div class="kpi">97.2%</div></article>
+      <article class="card"><h3>Open Policy Violations</h3><div class="kpi warn">2</div></article>
+      <article class="card"><h3>Fleet Compliance</h3><div class="kpi">41/43</div></article>
+    </section>
+    <table class="table">
+      <thead><tr><th>Module</th><th>Status</th><th>Last Run</th></tr></thead>
+      <tbody>
+        <tr><td>Hospital</td><td>Healthy</td><td>2m ago</td></tr>
+        <tr><td>Firewall</td><td>Enforcing</td><td>2m ago</td></tr>
+        <tr><td>Fleet</td><td>Synced</td><td>3m ago</td></tr>
+      </tbody>
+    </table>
+    <section class="card">
+      <h3>Runnable Repo-Brain services</h3>
+      <p>Execute all modules (Hospital → Fix.Safe) through the backend API.</p>
+      <button class="button" id="run-pipeline" type="button">Run full deterministic pipeline</button>
+      <pre class="output" id="pipeline-output">Click "Run full deterministic pipeline" to load module output.</pre>
+    </section>
+  </main>
+  <script src="/admin/admin-app.js"></script>
+</body>
+</html>
