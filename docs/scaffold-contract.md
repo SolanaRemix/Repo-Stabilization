@@ -11,7 +11,7 @@ This contract defines a deterministic, drift-resistant scaffold for Repo-Stabili
 3. Permissionless Repair: any user can scan/repair/rebuild.
 4. Conflict Resolver: deterministic merge resolution policy.
 5. Dependency Rebuilder: deterministic lockfile regeneration hook.
-6. Error Passing Tests: repairs are mergeable only after verification.
+6. Tests Must Pass: repairs are mergeable only after verification.
 
 ## Repo-Brain module sequence
 
