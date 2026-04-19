@@ -54,4 +54,10 @@ a:focus-visible {
   background: #121f3c; border: 1px solid #355ca0; color: var(--text);
   border-radius: 8px; padding: 8px 10px; cursor: pointer;
 }
+.button:focus-visible,
+.cta:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(62,166,255,.25);
+}
 .notice { margin-top: 10px; color: var(--muted); }
