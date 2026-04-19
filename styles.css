@@ -61,3 +61,14 @@ a:focus-visible {
   box-shadow: 0 0 0 4px rgba(62,166,255,.25);
 }
 .notice { margin-top: 10px; color: var(--muted); }
+.output {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #2b3a5d;
+  background: #0a1020;
+  color: #c2d5ff;
+  max-height: 340px;
+  overflow: auto;
+  white-space: pre-wrap;
+}

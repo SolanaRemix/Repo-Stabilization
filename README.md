@@ -13,14 +13,42 @@ Deterministic, drift-free **Repo Brain** scaffold for permissionless repository 
   - Dev dashboard
   - Permissionless role login switcher
 - Vercel one-shot static deployment config (`vercel.json`)
+- Runnable backend API for all Repo-Brain modules (`backend/server.js`)
 - Operator/developer/user/admin documentation in `docs/`
 
 ## Quick start (local)
 
 ```bash
-python3 -m http.server 4173
+npm start
 # open http://localhost:4173
 ```
+
+## Runnable Repo-Brain services
+
+The full app now runs deterministic, auditable services for all modules:
+
+- Hospital
+- Detect
+- Scan-Actions
+- Normalize
+- Doctor
+- Surgeon
+- Verify
+- AI-Guard
+- Firewall
+- Vitals
+- Fleet
+- Autopsy
+- Genome
+- Immunizer
+- Blackbox
+- Fix.Safe
+
+API endpoints:
+
+- `GET /healthz`
+- `GET /api/modules`
+- `POST /api/pipeline/run`
 
 ## Deploy (Vercel)
 
@@ -55,3 +83,7 @@ This repository is static and ready for one-shot deploy:
 ### Admin dashboard (updated)
 
 ![Admin dashboard updated](docs/screenshots/admin-dashboard-updated.png)
+
+### Admin dashboard (runnable services)
+
+https://github.com/user-attachments/assets/b307cd76-193c-449a-b55e-6e18fd54d607
