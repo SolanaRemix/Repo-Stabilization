@@ -37,3 +37,21 @@ This repository is static and ready for one-shot deploy:
 - `docs/roles-and-permissions.md`
 - `docs/deployment-vercel.md`
 - `docs/ui-screenshots.md`
+
+## UI screenshots
+
+### Landing dashboard
+
+![Landing dashboard](docs/screenshots/landing-dashboard.png)
+
+### Login role switcher
+
+![Login dashboard](docs/screenshots/login-dashboard.png)
+
+### Login storage hardening validation
+
+![Login storage hardening](docs/screenshots/login-storage-hardening.png)
+
+### Admin dashboard (updated)
+
+![Admin dashboard updated](docs/screenshots/admin-dashboard-updated.png)
