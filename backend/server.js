@@ -17,6 +17,13 @@ const CONTENT_TYPES = {
   '.txt': 'text/plain; charset=utf-8'
 };
 
+class HttpError extends Error {
+  constructor(statusCode, message) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
 function stableJson(value) {
   if (Array.isArray(value)) return `[${value.map(stableJson).join(',')}]`;
   if (value && typeof value === 'object') {
@@ -35,12 +42,17 @@ async function readJsonBody(req) {
   let raw = '';
   for await (const chunk of req) {
     raw += chunk;
-    if (raw.length > 1024 * 1024) throw new Error('Request body exceeds 1MB limit');
+    if (raw.length > 1024 * 1024) throw new HttpError(413, 'Request body exceeds 1MB limit');
   }
   if (!raw) return {};
-  const parsed = JSON.parse(raw);
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (_err) {
+    throw new HttpError(400, 'Malformed JSON request body');
+  }
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-    throw new Error('JSON body must be an object');
+    throw new HttpError(400, 'JSON body must be an object');
   }
   return parsed;
 }
@@ -56,6 +68,14 @@ function resolveStaticPath(rootDir, pathname) {
   return resolved;
 }
 
+function safeStat(filePath) {
+  try {
+    return fs.statSync(filePath);
+  } catch (_err) {
+    return null;
+  }
+}
+
 function serveStaticFile(rootDir, req, res, pathname) {
   const filePath = resolveStaticPath(rootDir, pathname);
   if (!filePath || !filePath.startsWith(rootDir)) {
@@ -63,7 +83,8 @@ function serveStaticFile(rootDir, req, res, pathname) {
     return;
   }
 
-  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+  const fileStat = safeStat(filePath);
+  if (fileStat && fileStat.isFile()) {
     const ext = path.extname(filePath);
     const contentType = CONTENT_TYPES[ext] || 'application/octet-stream';
     res.writeHead(200, { 'Content-Type': contentType });
@@ -73,7 +94,8 @@ function serveStaticFile(rootDir, req, res, pathname) {
 
   if (!pathname.endsWith('/')) {
     const candidate = path.join(rootDir, pathname, 'index.html');
-    if (fs.existsSync(candidate)) {
+    const candidateStat = safeStat(candidate);
+    if (candidateStat && candidateStat.isFile()) {
       res.writeHead(308, { Location: `${pathname}/` });
       res.end();
       return;
@@ -115,17 +137,18 @@ function createRepoBrainServer(options = {}) {
 
       serveStaticFile(rootDir, req, res, pathname);
     } catch (error) {
-      sendJson(res, 500, {
-        error: 'Repo-Brain service error',
-        details: error instanceof Error ? error.message : String(error)
-      });
+      if (error instanceof HttpError) {
+        sendJson(res, error.statusCode, { error: error.message });
+        return;
+      }
+      sendJson(res, 500, { error: 'Internal server error' });
     }
   });
 }
 
 function startServer() {
   const port = Number(process.env.PORT || 4173);
-  const host = process.env.HOST || '0.0.0.0';
+  const host = process.env.HOST || '127.0.0.1';
   const server = createRepoBrainServer();
   server.listen(port, host, () => {
     process.stdout.write(`Repo-Brain full app running at http://${host}:${port}\n`);

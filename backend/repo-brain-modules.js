@@ -43,6 +43,7 @@ const MODULE_NAMES = {
 };
 
 const LOCKFILE_NAMES = ['package-lock.json', 'pnpm-lock.yaml', 'yarn.lock', 'poetry.lock', 'Cargo.lock', 'go.sum'];
+const LOCKFILE_SET = new Set(LOCKFILE_NAMES);
 
 function stableSort(list) {
   return [...list].sort((a, b) => String(a).localeCompare(String(b)));
@@ -105,7 +106,7 @@ function scanRepository(repoPath) {
 
   const topLevelEntries = listTopLevel(rootPath);
   const workflows = listWorkflowFiles(rootPath);
-  const lockfiles = stableSort(topLevelEntries.filter((entry) => LOCKFILE_NAMES.includes(entry)));
+  const lockfiles = stableSort(topLevelEntries.filter((entry) => LOCKFILE_SET.has(entry)));
   const frameworks = detectFrameworks(rootPath, topLevelEntries);
 
   return {
@@ -162,9 +163,24 @@ const moduleHandlers = {
   },
   doctor(context) {
     const issues = [];
-    if (context.scan.lockfiles.length === 0) issues.push('Missing lockfile for deterministic dependency rebuilds');
-    if (context.scan.workflows.length === 0) issues.push('Missing CI workflow');
-    if (!context.scan.hasVercelConfig) issues.push('Missing vercel.json for static deployment config');
+    if (context.scan.lockfiles.length === 0) {
+      issues.push({
+        code: 'MISSING_LOCKFILE',
+        message: 'Missing lockfile for deterministic dependency rebuilds'
+      });
+    }
+    if (context.scan.workflows.length === 0) {
+      issues.push({
+        code: 'MISSING_CI_WORKFLOW',
+        message: 'Missing CI workflow'
+      });
+    }
+    if (!context.scan.hasVercelConfig) {
+      issues.push({
+        code: 'MISSING_VERCEL_CONFIG',
+        message: 'Missing vercel.json for static deployment config'
+      });
+    }
     return {
       status: issues.length === 0 ? 'stable' : 'attention',
       issues
@@ -173,8 +189,8 @@ const moduleHandlers = {
   surgeon(context) {
     const doctorIssues = context.results.doctor ? context.results.doctor.issues : [];
     const repairPlan = doctorIssues.map((issue) => {
-      if (issue.includes('lockfile')) return 'Run deterministic dependency rebuilder';
-      if (issue.includes('CI workflow')) return 'Install deterministic CI pipeline';
+      if (issue.code === 'MISSING_LOCKFILE') return 'Run deterministic dependency rebuilder';
+      if (issue.code === 'MISSING_CI_WORKFLOW') return 'Install deterministic CI pipeline';
       return 'Apply deterministic scaffold normalization';
     });
     return {
@@ -185,8 +201,8 @@ const moduleHandlers = {
     };
   },
   verify(context) {
-    const blockingIssues = (context.results.doctor ? context.results.doctor.issues : []).filter((issue) =>
-      issue.includes('Missing CI workflow')
+    const blockingIssues = (context.results.doctor ? context.results.doctor.issues : []).filter(
+      (issue) => issue.code === 'MISSING_CI_WORKFLOW'
     );
     return {
       status: blockingIssues.length === 0 ? 'pass' : 'fail',

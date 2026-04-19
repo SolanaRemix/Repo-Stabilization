@@ -27,6 +27,6 @@ test('serves module index and full pipeline endpoint', async () => {
     assert.equal(pipelinePayload.modulesExecuted.length, 16);
     assert.ok(pipelinePayload.results['fix-safe']);
   } finally {
-    await new Promise((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
+    await new Promise((resolve) => server.close(() => resolve()));
   }
 });
